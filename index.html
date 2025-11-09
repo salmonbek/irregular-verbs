@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>50 Irregular Verbs with Pronunciation</title>
+    <title>Irregular Verbs Pronunciation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,185 +18,164 @@
 
         .verb-list {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 10px;
+        }
+
+        .verb-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            width: 150px;
         }
 
         .verb-item button {
             padding: 10px 15px;
             font-size: 16px;
+            border-radius: 5px;
+            border: none;
             cursor: pointer;
             background: #007bff;
             color: white;
-            border: none;
-            border-radius: 5px;
-            text-align: left;
-            width: 280px;
-            transition: background 0.3s;
+            min-width: 120px;
         }
 
         .verb-item button:hover {
             background: #0056b3;
         }
 
-        .details {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-            opacity: 0;
-            transition: opacity 0.3s;
+        .shapes {
+            font-size: 14px;
+            margin-top: 3px;
+            color: #333;
         }
 
-        .details.show {
-            opacity: 1;
-        }
-
-        .details span {
-            background: #e2e6ea;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-style: italic;
-        }
-
-        .arrow {
-            width: 20px;
-            height: 5px;
-            background: #007bff;
-            margin-top: 5px;
-            border-radius: 3px;
-            animation: bounce 1s infinite;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .arrow.show {
-            opacity: 1;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-5px);
-            }
+        a:hover {
+            color: red;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Eshitmoqchi bo'lgan fe'l tugmasini bosing va fellarni eshitib so'ngida test yechishingiz mumkun</h1>
+    <h1>Tinglamoqchi bo'lgan Irregular Verbsni ustiga bosing </h1>
     <div class="verb-list" id="verbList"></div>
-    <a href="./pages/tets.html">Test uchun </a>
+    <a style="font-size: 30px; margin-top: 30px; display: inline-block;" href="./pages/tets.html">Test uchun Link</a>
     <script>
+        // Audio talaffuz funksiyasi
+        function speakWords(words) {
+            let i = 0;
+            function speakNext() {
+                if (i < words.length) {
+                    const utt = new SpeechSynthesisUtterance(words[i]);
+                    utt.lang = 'en-US';
+                    utt.onend = () => { i++; speakNext(); }
+                    speechSynthesis.speak(utt);
+                }
+            }
+            speakNext();
+        }
 
+        // 70 ta irregular verb
         const verbs = [
-            { base: "be", past: "was/were", pastPart: "been", pronunciation: ["be", "was/were", "been"], translation: "bo‘lmoq" },
-            { base: "become", past: "became", pastPart: "become", pronunciation: ["become", "became", "become"], translation: "bo‘lib qolmoq" },
-            { base: "begin", past: "began", pastPart: "begun", pronunciation: ["begin", "began", "begun"], translation: "boshlamoq" },
-            { base: "break", past: "broke", pastPart: "broken", pronunciation: ["break", "broke", "broken"], translation: "sindirmoq" },
-            { base: "bring", past: "brought", pastPart: "brought", pronunciation: ["bring", "brought", "brought"], translation: "olib kelmoq" },
-            { base: "build", past: "built", pastPart: "built", pronunciation: ["build", "built", "built"], translation: "qurmoq" },
-            { base: "buy", past: "bought", pastPart: "bought", pronunciation: ["buy", "bought", "bought"], translation: "sotib olmoq" },
-            { base: "catch", past: "caught", pastPart: "caught", pronunciation: ["catch", "caught", "caught"], translation: "ushlamoq" },
-            { base: "choose", past: "chose", pastPart: "chosen", pronunciation: ["choose", "chose", "chosen"], translation: "tanlamoq" },
-            { base: "come", past: "came", pastPart: "come", pronunciation: ["come", "came", "come"], translation: "kelmoq" },
-            { base: "cost", past: "cost", pastPart: "cost", pronunciation: ["cost", "cost", "cost"], translation: "tashqi xarajat" },
-            { base: "cut", past: "cut", pastPart: "cut", pronunciation: ["cut", "cut", "cut"], translation: "kesmoq" },
-            { base: "do", past: "did", pastPart: "done", pronunciation: ["do", "did", "done"], translation: "qilmoq" },
-            { base: "draw", past: "drew", pastPart: "drawn", pronunciation: ["draw", "drew", "drawn"], translation: "chizmoq" },
-            { base: "drink", past: "drank", pastPart: "drunk", pronunciation: ["drink", "drank", "drunk"], translation: "ichmoq" },
-            { base: "drive", past: "drove", pastPart: "driven", pronunciation: ["drive", "drove", "driven"], translation: "haydamoq" },
-            { base: "eat", past: "ate", pastPart: "eaten", pronunciation: ["eat", "ate", "eaten"], translation: "yemoq" },
-            { base: "fall", past: "fell", pastPart: "fallen", pronunciation: ["fall", "fell", "fallen"], translation: "tushmoq" },
-            { base: "feel", past: "felt", pastPart: "felt", pronunciation: ["feel", "felt", "felt"], translation: "his qilmoq" },
-            { base: "find", past: "found", pastPart: "found", pronunciation: ["find", "found", "found"], translation: "topmoq" },
-            { base: "fly", past: "flew", pastPart: "flown", pronunciation: ["fly", "flew", "flown"], translation: "uchmoq" },
-            { base: "forget", past: "forgot", pastPart: "forgotten", pronunciation: ["forget", "forgot", "forgotten"], translation: "unutmoq" },
-            { base: "get", past: "got", pastPart: "got/gotten", pronunciation: ["get", "got", "got"], translation: "olmoq" },
-            { base: "give", past: "gave", pastPart: "given", pronunciation: ["give", "gave", "given"], translation: "bermoq" },
-            { base: "go", past: "went", pastPart: "gone", pronunciation: ["go", "went", "gone"], translation: "bor/moq" },
-            { base: "grow", past: "grew", pastPart: "grown", pronunciation: ["grow", "grew", "grown"], translation: "o‘smoq" },
-            { base: "have", past: "had", pastPart: "had", pronunciation: ["have", "had", "had"], translation: "ega bo‘lmoq" },
-            { base: "hear", past: "heard", pastPart: "heard", pronunciation: ["hear", "heard", "heard"], translation: "eshitmoq" },
-            { base: "hold", past: "held", pastPart: "held", pronunciation: ["hold", "held", "held"], translation: "ushlamoq" },
-            { base: "keep", past: "kept", pastPart: "kept", pronunciation: ["keep", "kept", "kept"], translation: "saqlamoq" },
-            { base: "know", past: "knew", pastPart: "known", pronunciation: ["know", "knew", "known"], translation: "bilmoq" },
-            { base: "learn", past: "learnt/learned", pastPart: "learnt/learned", pronunciation: ["learn", "learnt", "learnt"], translation: "o‘rganmoq" },
-            { base: "leave", past: "left", pastPart: "left", pronunciation: ["leave", "left", "left"], translation: "qoldirmoq" },
-            { base: "lend", past: "lent", pastPart: "lent", pronunciation: ["lend", "lent", "lent"], translation: "qarz bermoq" },
-            { base: "let", past: "let", pastPart: "let", pronunciation: ["let", "let", "let"], translation: "ruxsat bermoq" },
-            { base: "lie", past: "lay", pastPart: "lain", pronunciation: ["lie", "lay", "lain"], translation: "yotmoq" },
-            { base: "lose", past: "lost", pastPart: "lost", pronunciation: ["lose", "lost", "lost"], translation: "yo‘qotmoq" },
-            { base: "make", past: "made", pastPart: "made", pronunciation: ["make", "made", "made"], translation: "tayyorlamoq" },
-            { base: "mean", past: "meant", pastPart: "meant", pronunciation: ["mean", "meant", "meant"], translation: "ma’nosini bildiradi" },
-            { base: "meet", past: "met", pastPart: "met", pronunciation: ["meet", "met", "met"], translation: "uchrashmoq" },
-            { base: "pay", past: "paid", pastPart: "paid", pronunciation: ["pay", "paid", "paid"], translation: "to‘lamoq" },
-            { base: "put", past: "put", pastPart: "put", pronunciation: ["put", "put", "put"], translation: "qo‘ymoq" },
-            { base: "read", past: "read", pastPart: "read", pronunciation: ["read", "read", "read"], translation: "o‘qimoq" },
-            { base: "ride", past: "rode", pastPart: "ridden", pronunciation: ["ride", "rode", "ridden"], translation: "minmoq" },
-            { base: "ring", past: "rang", pastPart: "rung", pronunciation: ["ring", "rang", "rung"], translation: "qaqrash" },
-            { base: "rise", past: "rose", pastPart: "risen", pronunciation: ["rise", "rose", "risen"], translation: "ko‘tarilmoq" },
-            { base: "run", past: "ran", pastPart: "run", pronunciation: ["run", "ran", "run"], translation: "yugurmoq" },
-            { base: "say", past: "said", pastPart: "said", pronunciation: ["say", "said", "said"], translation: "aytmoq" },
-            { base: "see", past: "saw", pastPart: "seen", pronunciation: ["see", "saw", "seen"], translation: "ko‘rmoq" },
-            { base: "sell", past: "sold", pastPart: "sold", pronunciation: ["sell", "sold", "sold"], translation: "sotmoq" },
-            { base: "send", past: "sent", pastPart: "sent", pronunciation: ["send", "sent", "sent"], translation: "yubormoq" },
-            { base: "set", past: "set", pastPart: "set", pronunciation: ["set", "set", "set"], translation: "o‘rnatmoq" },
-            { base: "shake", past: "shook", pastPart: "shaken", pronunciation: ["shake", "shook", "shaken"], translation: "silkitmoq" }
+            { base: "be", past: "was/were", pastPart: "been", uzb: "bo‘lmoq" },
+            { base: "become", past: "became", pastPart: "become", uzb: "bo‘lib qolmoq" },
+            { base: "begin", past: "began", pastPart: "begun", uzb: "boshlamoq" },
+            { base: "break", past: "broke", pastPart: "broken", uzb: "sindirmoq" },
+            { base: "bring", past: "brought", pastPart: "brought", uzb: "keltirmoq" },
+            { base: "build", past: "built", pastPart: "built", uzb: "qurmoq" },
+            { base: "buy", past: "bought", pastPart: "bought", uzb: "sotib olmoq" },
+            { base: "catch", past: "caught", pastPart: "caught", uzb: "ushlab olmoq" },
+            { base: "choose", past: "chose", pastPart: "chosen", uzb: "tanlamoq" },
+            { base: "come", past: "came", pastPart: "come", uzb: "kelmoq" },
+            { base: "cost", past: "cost", pastPart: "cost", uzb: "tushmoq, bahosi" },
+            { base: "cut", past: "cut", pastPart: "cut", uzb: "kesmoq" },
+            { base: "do", past: "did", pastPart: "done", uzb: "qilmoq" },
+            { base: "draw", past: "drew", pastPart: "drawn", uzb: "chizmoq" },
+            { base: "drink", past: "drank", pastPart: "drunk", uzb: "ichmoq" },
+            { base: "drive", past: "drove", pastPart: "driven", uzb: "haydamoq" },
+            { base: "eat", past: "ate", pastPart: "eaten", uzb: "yemoq" },
+            { base: "fall", past: "fell", pastPart: "fallen", uzb: "tushmoq, yiqilmoq" },
+            { base: "feel", past: "felt", pastPart: "felt", uzb: "his qilmoq" },
+            { base: "find", past: "found", pastPart: "found", uzb: "topmoq" },
+            { base: "fly", past: "flew", pastPart: "flown", uzb: "uchmoq" },
+            { base: "forget", past: "forgot", pastPart: "forgotten", uzb: "unutmoq" },
+            { base: "get", past: "got", pastPart: "got/gotten", uzb: "olmoq" },
+            { base: "give", past: "gave", pastPart: "given", uzb: "bermoq" },
+            { base: "go", past: "went", pastPart: "gone", uzb: "bor/moq" },
+            { base: "grow", past: "grew", pastPart: "grown", uzb: "o‘smoq" },
+            { base: "have", past: "had", pastPart: "had", uzb: "ega bo‘lmoq" },
+            { base: "hear", past: "heard", pastPart: "heard", uzb: "eshitmoq" },
+            { base: "hold", past: "held", pastPart: "held", uzb: "ushlab turmoq" },
+            { base: "keep", past: "kept", pastPart: "kept", uzb: "saqlamoq" },
+            { base: "know", past: "knew", pastPart: "known", uzb: "bilmoq" },
+            { base: "learn", past: "learnt/learned", pastPart: "learnt/learned", uzb: "o‘rganmoq" },
+            { base: "leave", past: "left", pastPart: "left", uzb: "qoldirmoq, ketmoq" },
+            { base: "lend", past: "lent", pastPart: "lent", uzb: "qarz bermoq" },
+            { base: "let", past: "let", pastPart: "let", uzb: "ruxsat bermoq" },
+            { base: "lie", past: "lay", pastPart: "lain", uzb: "yotmoq" },
+            { base: "lose", past: "lost", pastPart: "lost", uzb: "yo‘qotmoq" },
+            { base: "make", past: "made", pastPart: "made", uzb: "qilmoq, yaratmoq" },
+            { base: "mean", past: "meant", pastPart: "meant", uzb: "anglatmoq" },
+            { base: "meet", past: "met", pastPart: "met", uzb: "uchrashmoq" },
+            { base: "pay", past: "paid", pastPart: "paid", uzb: "to‘lamoq" },
+            { base: "put", past: "put", pastPart: "put", uzb: "qo‘ymoq" },
+            { base: "read", past: "read", pastPart: "read", uzb: "o‘qimoq" },
+            { base: "ride", past: "rode", pastPart: "ridden", uzb: "minmoq" },
+            { base: "ring", past: "rang", pastPart: "rung", uzb: "qo‘ng‘iroq qilmoq" },
+            { base: "rise", past: "rose", pastPart: "risen", uzb: "ko‘tarilmoq" },
+            { base: "run", past: "ran", pastPart: "run", uzb: "yugurmoq" },
+            { base: "say", past: "said", pastPart: "said", uzb: "aytmoq" },
+            { base: "see", past: "saw", pastPart: "seen", uzb: "ko‘rmoq" },
+            { base: "sell", past: "sold", pastPart: "sold", uzb: "sotmoq" },
+            { base: "send", past: "sent", pastPart: "sent", uzb: "yubormoq" },
+            { base: "set", past: "set", pastPart: "set", uzb: "o‘rnatmoq" },
+            { base: "shake", past: "shook", pastPart: "shaken", uzb: "silkitmoq" },
+            { base: "shine", past: "shone", pastPart: "shone", uzb: "yorimoq" },
+            { base: "shoot", past: "shot", pastPart: "shot", uzb: "otmoq" },
+            { base: "show", past: "showed", pastPart: "shown", uzb: "ko‘rsatmoq" },
+            { base: "shut", past: "shut", pastPart: "shut", uzb: "yopmoq" },
+            { base: "sing", past: "sang", pastPart: "sung", uzb: "kuylamoq" },
+            { base: "sit", past: "sat", pastPart: "sat", uzb: "o‘tir/moq" },
+            { base: "sleep", past: "slept", pastPart: "slept", uzb: "uxlamoq" },
+            { base: "speak", past: "spoke", pastPart: "spoken", uzb: "gapirmoq" },
+            { base: "spend", past: "spent", pastPart: "spent", uzb: "sarflamoq" },
+            { base: "stand", past: "stood", pastPart: "stood", uzb: "turmoq" },
+            { base: "swim", past: "swam", pastPart: "swum", uzb: "suzmoq" },
+            { base: "take", past: "took", pastPart: "taken", uzb: "olmoq" },
+            { base: "teach", past: "taught", pastPart: "taught", uzb: "o‘qitmoq" },
+            { base: "tell", past: "told", pastPart: "told", uzb: "aytib bermoq" },
+            { base: "think", past: "thought", pastPart: "thought", uzb: "o‘ylamoq" },
+            { base: "throw", past: "threw", pastPart: "thrown", uzb: "otmoq" }
         ];
 
+        // Sahifaga buttonlar yaratish
         const verbList = document.getElementById('verbList');
 
-        verbs.forEach((verb, index) => {
-            const item = document.createElement('div');
-            item.className = 'verb-item';
+        verbs.forEach((verb) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'verb-item';
 
-            const button = document.createElement('button');
-            button.textContent = verb.base;
+            const btn = document.createElement('button');
+            btn.textContent = verb.base;
 
-            const details = document.createElement('div');
-            details.className = 'details';
-            details.innerHTML = `
-    <span>${verb.past}</span>
-    <span>${verb.pastPart}</span>
-    <span>${verb.translation}</span>
-  `;
+            const shapesDiv = document.createElement('div');
+            shapesDiv.className = 'shapes';
 
-            const arrow = document.createElement('div');
-            arrow.className = 'arrow';
+            wrapper.appendChild(btn);
+            wrapper.appendChild(shapesDiv);
+            verbList.appendChild(wrapper);
 
-            button.addEventListener('click', () => {
-                // Audio pronunciation
-                function speakWord(word) {
-                    const utterance = new SpeechSynthesisUtterance(word);
-                    utterance.lang = 'en-US';
-                    speechSynthesis.speak(utterance);
-                }
-                speakWord(verb.pronunciation[0]);
-                setTimeout(() => speakWord(verb.pronunciation[1]), 700);
-                setTimeout(() => speakWord(verb.pronunciation[2]), 1400);
-
-                // Show details and arrow
-                const isShown = details.classList.contains('show');
-                document.querySelectorAll('.details').forEach(d => d.classList.remove('show'));
-                document.querySelectorAll('.arrow').forEach(a => a.classList.remove('show'));
-                if (!isShown) {
-                    details.classList.add('show');
-                    arrow.classList.add('show');
-                }
+            btn.addEventListener('click', () => {
+                // Audio talaffuz
+                speakWords([verb.base, verb.past, verb.pastPart]);
+                // Past, Past Participle va tarjima ko‘rsatish
+                shapesDiv.innerHTML = `<b>Past Simple:</b> ${verb.past} <br>
+                           <b>Past Participle:</b> ${verb.pastPart} <br>
+                           <b>Tarjima:</b> ${verb.uzb}`;
             });
-
-            item.appendChild(button);
-            item.appendChild(details);
-            item.appendChild(arrow);
-            verbList.appendChild(item);
         });
-
     </script>
 
 </body>
