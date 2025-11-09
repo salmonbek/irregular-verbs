@@ -27,7 +27,7 @@
             flex-direction: column;
             align-items: flex-start;
             gap: 5px;
-            width: 150px;
+            width: 160px;
         }
 
         .verb-item button {
@@ -38,7 +38,7 @@
             cursor: pointer;
             background: #007bff;
             color: white;
-            min-width: 120px;
+            min-width: 140px;
         }
 
         .verb-item button:hover {
@@ -59,9 +59,9 @@
 
 <body>
 
-    <h1>Tinglamoqchi bo'lgan Irregular Verbsni ustiga bosing </h1>
+    <h1> Tinglamoqchi bo'lgan Irregular Verbsni ustiga bosing</h1>
     <div class="verb-list" id="verbList"></div>
-    <a style="font-size: 30px; margin-top: 30px; display: inline-block;" href="./pages/tets.html">Test uchun Link</a>
+    <a style="font-size: 25px;" href="">Test uchun havola</a>
     <script>
         // Audio talaffuz funksiyasi
         function speakWords(words) {
@@ -77,7 +77,7 @@
             speakNext();
         }
 
-        // 70 ta irregular verb
+        // 70 ta irregular verbs
         const verbs = [
             { base: "be", past: "was/were", pastPart: "been", uzb: "bo‘lmoq" },
             { base: "become", past: "became", pastPart: "become", uzb: "bo‘lib qolmoq" },
@@ -150,10 +150,10 @@
             { base: "throw", past: "threw", pastPart: "thrown", uzb: "otmoq" }
         ];
 
-        // Sahifaga buttonlar yaratish
+        // Buttonlarni sahifaga chiqarish va click event
         const verbList = document.getElementById('verbList');
 
-        verbs.forEach((verb) => {
+        verbs.forEach(verb => {
             const wrapper = document.createElement('div');
             wrapper.className = 'verb-item';
 
@@ -168,8 +168,19 @@
             verbList.appendChild(wrapper);
 
             btn.addEventListener('click', () => {
-                // Audio talaffuz
-                speakWords([verb.base, verb.past, verb.pastPart]);
+                // Audio talaffuz faqat click event ichida
+                const words = [verb.base, verb.past, verb.pastPart];
+                let i = 0;
+                function speakNext() {
+                    if (i < words.length) {
+                        const utt = new SpeechSynthesisUtterance(words[i]);
+                        utt.lang = 'en-US';
+                        utt.onend = () => { i++; speakNext(); }
+                        speechSynthesis.speak(utt);
+                    }
+                }
+                speakNext();
+
                 // Past, Past Participle va tarjima ko‘rsatish
                 shapesDiv.innerHTML = `<b>Past Simple:</b> ${verb.past} <br>
                            <b>Past Participle:</b> ${verb.pastPart} <br>
