@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irregular Verbs Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f4f8;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .verb-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .verb-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .verb-item label {
+            font-weight: bold;
+        }
+
+        .verb-item input {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 150px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Irregular Verbs Test</h1>
+
+    <div class="verb-list" id="verbList"></div>
+    <button id="checkBtn">Check Result</button>
+    <div class="result" id="result"></div>
+
+    <script>
+        const verbs = [
+            { base: "be", past: "was/were", pastPart: "been" },
+            { base: "become", past: "became", pastPart: "become" },
+            { base: "begin", past: "began", pastPart: "begun" },
+            { base: "break", past: "broke", pastPart: "broken" },
+            { base: "bring", past: "brought", pastPart: "brought" },
+            { base: "build", past: "built", pastPart: "built" },
+            { base: "buy", past: "bought", pastPart: "bought" },
+            { base: "catch", past: "caught", pastPart: "caught" },
+            { base: "choose", past: "chose", pastPart: "chosen" },
+            { base: "come", past: "came", pastPart: "come" },
+            { base: "cost", past: "cost", pastPart: "cost" },
+            { base: "cut", past: "cut", pastPart: "cut" },
+            { base: "do", past: "did", pastPart: "done" },
+            { base: "draw", past: "drew", pastPart: "drawn" },
+            { base: "drink", past: "drank", pastPart: "drunk" },
+            { base: "drive", past: "drove", pastPart: "driven" },
+            { base: "eat", past: "ate", pastPart: "eaten" },
+            { base: "fall", past: "fell", pastPart: "fallen" },
+            { base: "feel", past: "felt", pastPart: "felt" },
+            { base: "find", past: "found", pastPart: "found" },
+            { base: "fly", past: "flew", pastPart: "flown" },
+            { base: "forget", past: "forgot", pastPart: "forgotten" },
+            { base: "get", past: "got", pastPart: "got/gotten" },
+            { base: "give", past: "gave", pastPart: "given" },
+            { base: "go", past: "went", pastPart: "gone" },
+            { base: "grow", past: "grew", pastPart: "grown" },
+            { base: "have", past: "had", pastPart: "had" },
+            { base: "hear", past: "heard", pastPart: "heard" },
+            { base: "hold", past: "held", pastPart: "held" },
+            { base: "keep", past: "kept", pastPart: "kept" },
+            { base: "know", past: "knew", pastPart: "known" },
+            { base: "learn", past: "learnt/learned", pastPart: "learnt/learned" },
+            { base: "leave", past: "left", pastPart: "left" },
+            { base: "lend", past: "lent", pastPart: "lent" },
+            { base: "let", past: "let", pastPart: "let" },
+            { base: "lie", past: "lay", pastPart: "lain" },
+            { base: "lose", past: "lost", pastPart: "lost" },
+            { base: "make", past: "made", pastPart: "made" },
+            { base: "mean", past: "meant", pastPart: "meant" },
+            { base: "meet", past: "met", pastPart: "met" },
+            { base: "pay", past: "paid", pastPart: "paid" },
+            { base: "put", past: "put", pastPart: "put" },
+            { base: "read", past: "read", pastPart: "read" },
+            { base: "ride", past: "rode", pastPart: "ridden" },
+            { base: "ring", past: "rang", pastPart: "rung" },
+            { base: "rise", past: "rose", pastPart: "risen" },
+            { base: "run", past: "ran", pastPart: "run" },
+            { base: "say", past: "said", pastPart: "said" },
+            { base: "see", past: "saw", pastPart: "seen" },
+            { base: "sell", past: "sold", pastPart: "sold" },
+            { base: "send", past: "sent", pastPart: "sent" },
+            { base: "set", past: "set", pastPart: "set" },
+            { base: "shake", past: "shook", pastPart: "shaken" }
+        ];
+
+        const verbList = document.getElementById('verbList');
+
+        verbs.forEach((verb, index) => {
+            const item = document.createElement('div');
+            item.className = 'verb-item';
+            item.innerHTML = `
+    <label>${verb.base}</label>
+    <input type="text" placeholder="Past Simple (2-shakl)" id="past-${index}">
+    <input type="text" placeholder="Past Participle (3-shakl)" id="pastPart-${index}">
+  `;
+            verbList.appendChild(item);
+        });
+
+        document.getElementById('checkBtn').addEventListener('click', () => {
+            let score = 0;
+            verbs.forEach((verb, index) => {
+                const pastVal = document.getElementById(`past-${index}`).value.trim().toLowerCase();
+                const pastPartVal = document.getElementById(`pastPart-${index}`).value.trim().toLowerCase();
+
+                // Agar javoblar to'g'ri bo'lsa, 1 ball qo'shiladi
+                const pastCorrect = verb.past.toLowerCase().split('/').includes(pastVal);
+                const pastPartCorrect = verb.pastPart.toLowerCase().split('/').includes(pastPartVal);
+                if (pastCorrect && pastPartCorrect) score++;
+            });
+
+            document.getElementById('result').textContent = `Siz ${score} / ${verbs.length} ta javobni to‘g‘ri topdingiz.`;
+        });
+    </script>
+
+</body>
+
+</html>
