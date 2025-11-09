@@ -50,34 +50,16 @@
             margin-top: 3px;
             color: #333;
         }
-
-        a:hover {
-            color: red;
-        }
     </style>
 </head>
 
 <body>
 
-    <h1> Tinglamoqchi bo'lgan Irregular Verbsni ustiga bosing</h1>
+    <h1>Irregular Verbs Pronunciation</h1>
     <div class="verb-list" id="verbList"></div>
-    <a style="font-size: 25px;" href="">Test uchun havola</a>
+    <a style="font-size: 25px;" href="./pages/tets.html">Test uchun havola</a>
     <script>
-        // Audio talaffuz funksiyasi
-        function speakWords(words) {
-            let i = 0;
-            function speakNext() {
-                if (i < words.length) {
-                    const utt = new SpeechSynthesisUtterance(words[i]);
-                    utt.lang = 'en-US';
-                    utt.onend = () => { i++; speakNext(); }
-                    speechSynthesis.speak(utt);
-                }
-            }
-            speakNext();
-        }
-
-        // 70 ta irregular verbs
+        // 10 ta misol, lekin siz 70 ni shu formatda qo'shasiz
         const verbs = [
             { base: "be", past: "was/were", pastPart: "been", uzb: "bo‘lmoq" },
             { base: "become", past: "became", pastPart: "become", uzb: "bo‘lib qolmoq" },
@@ -150,7 +132,6 @@
             { base: "throw", past: "threw", pastPart: "thrown", uzb: "otmoq" }
         ];
 
-        // Buttonlarni sahifaga chiqarish va click event
         const verbList = document.getElementById('verbList');
 
         verbs.forEach(verb => {
@@ -168,20 +149,24 @@
             verbList.appendChild(wrapper);
 
             btn.addEventListener('click', () => {
-                // Audio talaffuz faqat click event ichida
-                const words = [verb.base, verb.past, verb.pastPart];
-                let i = 0;
-                function speakNext() {
-                    if (i < words.length) {
-                        const utt = new SpeechSynthesisUtterance(words[i]);
-                        utt.lang = 'en-US';
-                        utt.onend = () => { i++; speakNext(); }
-                        speechSynthesis.speak(utt);
-                    }
-                }
-                speakNext();
+                // Clear any previous speech
+                speechSynthesis.cancel();
 
-                // Past, Past Participle va tarjima ko‘rsatish
+                // Ketma-ket talaffuzni ishga tushirish
+                const utterances = [
+                    new SpeechSynthesisUtterance(verb.base),
+                    new SpeechSynthesisUtterance(verb.past),
+                    new SpeechSynthesisUtterance(verb.pastPart)
+                ];
+
+                utterances.forEach(u => u.lang = 'en-US');
+
+                utterances[0].onend = () => speechSynthesis.speak(utterances[1]);
+                utterances[1].onend = () => speechSynthesis.speak(utterances[2]);
+
+                speechSynthesis.speak(utterances[0]);
+
+                // Past va Past Participle + tarjima ko‘rsatish
                 shapesDiv.innerHTML = `<b>Past Simple:</b> ${verb.past} <br>
                            <b>Past Participle:</b> ${verb.pastPart} <br>
                            <b>Tarjima:</b> ${verb.uzb}`;
